@@ -1,6 +1,5 @@
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Vector;
 import java.util.LinkedList;
 import java.util.Map;
@@ -161,11 +160,11 @@ class Pair implements Comparable<Pair> {
     }
 }
 
-class QuickSort {
+class QuickSort<T> {
     private static Random rand = new Random();
 
-    public static int partition(ArrayList<Pair> arr, int l, int r, int p) {
-        Pair pivot = arr.get(p);
+    public static <T extends Comparable<T>> int partition(ArrayList<T> arr, int l, int r, int p) {
+        T pivot = arr.get(p);
         int i = l;
         int j = r;
         while (i < j && i <= r) {
@@ -176,7 +175,7 @@ class QuickSort {
                 j--;
             }
             if (i < j) {
-                Pair tmp = arr.get(i);
+                T tmp = arr.get(i);
                 arr.set(i, arr.get(j));
                 arr.set(j, tmp);
             }
@@ -184,7 +183,7 @@ class QuickSort {
         return j;
     }
 
-    public static void quicksort(ArrayList<Pair> arr, int l, int r) {
+    public static <T extends Comparable<T>> void quicksort(ArrayList<T> arr, int l, int r) {
         if (l < r) {
             int pivot = rand.nextInt(r - l + 1) + l;
             int p = partition(arr, l, r, pivot);
@@ -193,7 +192,7 @@ class QuickSort {
         }
     }
 
-    public static void sort(ArrayList<Pair> arr) {
+    public static <T extends Comparable<T>> void sort(ArrayList<T> arr) {
         quicksort(arr, 0, arr.size() - 1);
     }
 }
