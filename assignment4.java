@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.Vector;
 import java.util.LinkedList;
 import java.util.Map;
+import java.util.Random;
 import java.util.HashMap;
 import java.util.Scanner;
 
@@ -60,7 +61,7 @@ class Graph {
             }
             ranklist.add(new Pair(mapElement.getKey(), sum));
         }
-        Collections.sort(ranklist, Collections.reverseOrder());
+        QuickSort.sort(ranklist);
         int n = ranklist.size();
         for (int i = 0; i < n; i++) {
             System.out.print(ranklist.get(i).first);
@@ -157,5 +158,42 @@ class Pair implements Comparable<Pair> {
             res = this.first.compareTo(p.first);
         }
         return res;
+    }
+}
+
+class QuickSort {
+    private static Random rand = new Random();
+
+    public static int partition(ArrayList<Pair> arr, int l, int r, int p) {
+        Pair pivot = arr.get(p);
+        int i = l;
+        int j = r;
+        while (i < j && i <= r) {
+            while (i <= r && arr.get(i).compareTo(pivot) >= 0) {
+                i++;
+            }
+            while (arr.get(j).compareTo(pivot) < 0) {
+                j--;
+            }
+            if (i < j) {
+                Pair tmp = arr.get(i);
+                arr.set(i, arr.get(j));
+                arr.set(j, tmp);
+            }
+        }
+        return j;
+    }
+
+    public static void quicksort(ArrayList<Pair> arr, int l, int r) {
+        if (l < r) {
+            int pivot = rand.nextInt(r - l + 1) + l;
+            int p = partition(arr, l, r, pivot);
+            quicksort(arr, l, p);
+            quicksort(arr, p + 1, r);
+        }
+    }
+
+    public static void sort(ArrayList<Pair> arr) {
+        quicksort(arr, 0, arr.size() - 1);
     }
 }
