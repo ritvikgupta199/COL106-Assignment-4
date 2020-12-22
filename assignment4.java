@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Vector;
 import java.util.LinkedList;
 import java.util.Map;
@@ -16,6 +17,8 @@ public class assignment4 {
 
         if (argparser.function.equals("average")) {
             graph.printAverage();
+        } else if (argparser.function.equals("rank")) {
+            graph.printRank();
         } else {
             System.out.println("Wrong arugument");
         }
@@ -46,6 +49,25 @@ class Graph {
         }
         double avg = count == 0 ? 0.0 : (double) sum / count;
         System.out.println(String.format("%.2f", avg));
+    }
+
+    void printRank() {
+        ArrayList<Pair> ranklist = new ArrayList<>();
+        for (Map.Entry<String, Vector<Pair>> mapElement : graph.entrySet()) {
+            int sum = 0;
+            for (Pair p : mapElement.getValue()) {
+                sum += p.second;
+            }
+            ranklist.add(new Pair(mapElement.getKey(), sum));
+        }
+        Collections.sort(ranklist, Collections.reverseOrder());
+        int n = ranklist.size();
+        for (int i = 0; i < n; i++) {
+            System.out.print(ranklist.get(i).first);
+            if (i != n - 1) {
+                System.out.print(",");
+            }
+        }
     }
 
     void readNodes() throws FileNotFoundException {
@@ -120,12 +142,20 @@ class FileReader {
     }
 }
 
-class Pair {
+class Pair implements Comparable<Pair> {
     public String first;
-    public int second;
+    public Integer second;
 
     Pair(String first, int second) {
         this.first = first;
         this.second = second;
+    }
+
+    public int compareTo(Pair p) {
+        int res = this.second.compareTo(p.second);
+        if (res == 0) {
+            res = this.first.compareTo(p.first);
+        }
+        return res;
     }
 }
