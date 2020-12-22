@@ -16,10 +16,12 @@ public class assignment4 {
         graph.makeGraph();
 
         if (argparser.function.equals("average")) {
-            graph.printAverage();
+            graph.calcAverage();
         } else if (argparser.function.equals("rank")) {
-            graph.printRank();
-        } else {
+            graph.calcRank();
+        } else if(argparser.function.equals("independent_storylines_dfs")){
+            graph.calcIndependentStorylines();
+        }else {
             System.out.println("Wrong arugument");
         }
     }
@@ -27,11 +29,15 @@ public class assignment4 {
 
 class Graph {
     HashMap<String, Vector<Pair>> graph;
+    HashMap<String, Boolean> vis;
+    ArrayList<ArrayList<String>> components;
     String nodesFile;
     String edgesFile;
 
     Graph(String nodesFile, String edgesFile) {
         this.graph = new HashMap<>();
+        this.vis = new HashMap<>();
+        this.components = new ArrayList<>();
         this.nodesFile = nodesFile;
         this.edgesFile = edgesFile;
     }
@@ -41,7 +47,7 @@ class Graph {
         readEdges();
     }
 
-    void printAverage() {
+    void calcAverage() {
         int sum = 0, count = 0;
         for (Map.Entry<String, Vector<Pair>> mapElement : graph.entrySet()) {
             sum += (mapElement.getValue().size());
@@ -51,7 +57,7 @@ class Graph {
         System.out.println(String.format("%.2f", avg));
     }
 
-    void printRank() {
+    void calcRank() {
         ArrayList<Pair> ranklist = new ArrayList<>();
         for (Map.Entry<String, Vector<Pair>> mapElement : graph.entrySet()) {
             int sum = 0;
@@ -70,6 +76,41 @@ class Graph {
         }
     }
 
+    void DFS(String v, int count) {
+        Vector<Pair> adj = graph.get(v);
+        components.get(count).add(v);
+        vis.put(v, true);
+        for (int i = 0; i < adj.size(); i++) {
+            Pair u = adj.get(i);
+            if (vis.get(u.first) != null && !vis.get(u.first)) {
+                DFS(u.first, count);
+            }
+        }
+    }
+
+    void calcIndependentStorylines() {
+        int count = 0;
+        for (Map.Entry<String, Vector<Pair>> mapElement : graph.entrySet()) {
+            boolean v = vis.get(mapElement.getKey());
+            if (!v) {
+                components.add(new ArrayList<>());
+                DFS(mapElement.getKey(), count);
+                count++;
+            }
+        }
+        for (int i = 0; i < components.size(); i++) {
+            ArrayList<String> list = components.get(i);
+            int n = list.size();
+            for (int j = 0; j < n; j++) {
+                System.out.print(list.get(j));
+                if (j != n - 1) {
+                    System.out.print(",");
+                }
+            }
+            System.out.print("\n");
+        }
+    }
+
     void readNodes() throws FileNotFoundException {
         FileReader reader = new FileReader(nodesFile);
         reader.nextLine();
@@ -77,6 +118,7 @@ class Graph {
             String s = reader.nextLine();
             String[] row = s.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
             graph.put(row[0], new Vector<>());
+            vis.put(row[0], false);
         }
     }
 
