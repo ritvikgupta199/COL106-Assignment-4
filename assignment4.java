@@ -122,8 +122,8 @@ class Graph {
         while (reader.hasNext()) {
             String s = reader.nextLine();
             String[] row = s.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-            graph.put(row[0], new Vector<>());
-            vis.put(row[0], false);
+            graph.put(row[1].replace("\"", ""), new Vector<>());
+            vis.put(row[1].replace("\"", ""), false);
         }
     }
 
@@ -133,8 +133,8 @@ class Graph {
         while (reader.hasNext()) {
             String s = reader.nextLine();
             String[] row = s.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-            graph.get(row[0]).add(new Pair<>(Integer.parseInt(row[2]), row[1]));
-            graph.get(row[1]).add(new Pair<>(Integer.parseInt(row[2]), row[0]));
+            graph.get(row[0].replace("\"", "")).add(new Pair<>(Integer.parseInt(row[2]), row[1].replace("\"", "")));
+            graph.get(row[1].replace("\"", "")).add(new Pair<>(Integer.parseInt(row[2]), row[0].replace("\"", "")));
         }
     }
 
