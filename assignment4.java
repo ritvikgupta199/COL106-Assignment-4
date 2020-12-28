@@ -2,9 +2,9 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.Vector;
 import java.util.LinkedList;
-import java.util.Map;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.Map;
 
 public class assignment4 {
     public static void main(String[] args) throws FileNotFoundException {
