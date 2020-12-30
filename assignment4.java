@@ -7,21 +7,25 @@ import java.util.Scanner;
 import java.util.Map;
 
 public class assignment4 {
-    public static void main(String[] args) throws FileNotFoundException {
+    public static void main(String[] args) {
         ArgParser argparser = new ArgParser();
         argparser.parse(args);
 
         Graph graph = new Graph(argparser.nodesFile, argparser.edgesFile);
-        graph.makeGraph();
+        try {
+            graph.makeGraph();
 
-        if (argparser.function.equals("average")) {
-            graph.calcAverage();
-        } else if (argparser.function.equals("rank")) {
-            graph.calcRank();
-        } else if (argparser.function.equals("independent_storylines_dfs")) {
-            graph.calcIndependentStorylines();
-        } else {
-            System.out.println("Wrong arugument");
+            if (argparser.function.equals("average")) {
+                graph.calcAverage();
+            } else if (argparser.function.equals("rank")) {
+                graph.calcRank();
+            } else if (argparser.function.equals("independent_storylines_dfs")) {
+                graph.calcIndependentStorylines();
+            } else {
+                System.out.println("Wrong arguments");
+            }
+        } catch (Exception e) {
+            System.out.println("File not found");
         }
     }
 }
