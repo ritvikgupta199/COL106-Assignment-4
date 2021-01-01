@@ -126,8 +126,9 @@ class Graph {
         while (reader.hasNext()) {
             String s = reader.nextLine();
             String[] row = s.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-            graph.put(row[1].replace("\"", ""), new Vector<>());
-            vis.put(row[1].replace("\"", ""), false);
+            row[1] = removeQuotes(row[1]);
+            graph.put(row[1], new Vector<>());
+            vis.put(row[1], false);
         }
     }
 
@@ -137,8 +138,18 @@ class Graph {
         while (reader.hasNext()) {
             String s = reader.nextLine();
             String[] row = s.split(",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)");
-            graph.get(row[0].replace("\"", "")).add(new Pair<>(Integer.parseInt(row[2]), row[1].replace("\"", "")));
-            graph.get(row[1].replace("\"", "")).add(new Pair<>(Integer.parseInt(row[2]), row[0].replace("\"", "")));
+            row[0] = removeQuotes(row[0]);
+            row[1] = removeQuotes(row[1]);
+            graph.get(row[0]).add(new Pair<>(Integer.parseInt(row[2]), row[1]));
+            graph.get(row[1]).add(new Pair<>(Integer.parseInt(row[2]), row[0]));
+        }
+    }
+
+    String removeQuotes(String input) {
+        if (input.charAt(0) == '"' && input.charAt(input.length() - 1) == '"') {
+            return input.substring(1, input.length() - 1);
+        } else {
+            return input;
         }
     }
 
